@@ -34,6 +34,7 @@ import AdminUserList from './Screens/AdminUserList';
 import AdminUserEditScreen from './Screens/AdminUserEditScreen';
 import SellerRoutes from './components/SellerRoutes';
 import SellerOrderDetails from './Screens/SellerOrderDetails';
+import SellerAddCategoryScreen from './Screens/SellerAddCategoryScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -216,6 +217,14 @@ function App() {
                   <AdminRoutes>
                     <AdminUserList />
                   </AdminRoutes>
+                }
+              ></Route>
+              <Route
+                path="/admin/products/addcategory"
+                element={
+                  <SellerRoutes>
+                    <SellerAddCategoryScreen />
+                  </SellerRoutes>
                 }
               ></Route>
               <Route

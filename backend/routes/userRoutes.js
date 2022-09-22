@@ -101,10 +101,21 @@ userRouter.post(
   })
 );
 
-userRouter.get('/', async (req, res) => {
-  const users = await User.find();
-  res.send(users);
-});
+userRouter.get(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const { query } = req;
+    const pageSize = query.pageSize || 6;
+    const page = query.page || 1;
+    const productCount = await User.count();
+    const users = await User.find()
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+    res.send({ users, page, pages: Math.ceil(productCount / pageSize) });
+  })
+);
 
 userRouter.put(
   '/profile',

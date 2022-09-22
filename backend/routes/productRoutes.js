@@ -1,5 +1,6 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
+import Categories from '../models/productCategoriesModel.js';
 import Product from '../models/productModel.js';
 import { isAdmin, isAuth, isSeller } from '../utils.js';
 
@@ -22,6 +23,19 @@ productRouter.get('/', async (req, res) => {
 });
 
 /*admin view */
+
+productRouter.post(
+  '/addcategory',
+  isAuth,
+  isSeller,
+  expressAsyncHandler(async (req, res) => {
+    const newCategories = new Categories({
+      category: req.body.category,
+    });
+    const category = await newCategories.save();
+    res.send({ message: 'Category Created', category });
+  })
+);
 
 productRouter.post(
   '/',
@@ -120,10 +134,19 @@ productRouter.get(
     const pageSize = query.pageSize || PAGE_SIZE;
     const page = query.page || 1;
 
-    const queryFilter =
+    const queryFilterName =
       searchQuery && searchQuery !== 'all'
         ? {
             name: {
+              $regex: searchQuery,
+              $options: 'i',
+            },
+          }
+        : {};
+    const queryFilterCategory =
+      searchQuery && searchQuery !== 'all'
+        ? {
+            category: {
               $regex: searchQuery,
               $options: 'i',
             },
@@ -144,7 +167,8 @@ productRouter.get(
         : {};
 
     const products = await Product.find({
-      ...queryFilter,
+      ...queryFilterName,
+      // ...queryFilterCategory,
       ...categoryFilter,
       ...priceFilter,
     })
@@ -152,7 +176,8 @@ productRouter.get(
       .limit(pageSize);
 
     const countProducts = await Product.countDocuments({
-      ...queryFilter,
+      // ...queryFilterCategory,
+      ...queryFilterName,
       ...categoryFilter,
       ...priceFilter,
     });
@@ -171,7 +196,7 @@ productRouter.get(
 productRouter.get(
   '/categories',
   expressAsyncHandler(async (req, res) => {
-    const categories = await Product.find().distinct('category');
+    const categories = await Categories.find().distinct('category');
     res.send(categories);
   })
 );

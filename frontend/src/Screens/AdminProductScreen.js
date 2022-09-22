@@ -122,7 +122,7 @@ export default function AdminProductScreen() {
           <h1>Products</h1>
         </Col>
         <Col className="col text-end">
-          <div>
+          <span>
             <Button
               type="button"
               variant="outline-success"
@@ -130,7 +130,18 @@ export default function AdminProductScreen() {
             >
               Create Product
             </Button>
-          </div>
+          </span>{' '}
+          <span>
+            <Button
+              type="button"
+              variant="outline-success"
+              onClick={() => {
+                navigate('/admin/products/addcategory');
+              }}
+            >
+              Add Product Category
+            </Button>
+          </span>
         </Col>
       </Row>
 

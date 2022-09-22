@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -16,8 +17,10 @@ const reducer = (state, action) => {
     case 'FETCH_SUCCESS':
       return {
         ...state,
-        users: action.payload,
+        users: action.payload.users,
         loading: false,
+        page: action.payload.page,
+        pages: action.payload.pages,
       };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
@@ -39,12 +42,17 @@ const reducer = (state, action) => {
 };
 
 export default function AdminUserList() {
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const page = sp.get('page') || 1;
   const navigate = useNavigate();
-  const [{ loading, error, users, loadingDelete, successDelete }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: '',
-    });
+  const [
+    { loading, error, users, loadingDelete, successDelete, pages },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: '',
+  });
 
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -53,7 +61,7 @@ export default function AdminUserList() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/users`, {
+        const { data } = await axios.get(`/api/users?page=${page}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -69,7 +77,7 @@ export default function AdminUserList() {
     } else {
       fetchData();
     }
-  }, [userInfo, successDelete]);
+  }, [userInfo, successDelete, page]);
 
   const deleteHandler = async (user) => {
     if (window.confirm('Are you sure to delete?')) {
@@ -88,6 +96,10 @@ export default function AdminUserList() {
       }
     }
   };
+  const getFilterUrl = (filter) => {
+    const filterPage = filter.page || page;
+    return `?page=${filterPage}`;
+  };
 
   return (
     <div>
@@ -102,46 +114,66 @@ export default function AdminUserList() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>EMAIL</th>
-              <th>IS ADMIN</th>
-              <th>IS SELLER</th>
-              <th>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.isAdmin ? 'YES' : 'NO'}</td>
-                <td>{user.isSeller ? 'YES' : 'NO'}</td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="outline-warning"
-                    onClick={() => navigate(`/admin/user/${user._id}`)}
-                  >
-                    Edit
-                  </Button>{' '}
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="outline-danger"
-                    onClick={() => deleteHandler(user)}
-                  >
-                    Delete
-                  </Button>
-                </td>
+        <div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>IS ADMIN</th>
+                <th>IS SELLER</th>
+                <th>ACTIONS</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <td>{user._id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.isAdmin ? 'YES' : 'NO'}</td>
+                  <td>{user.isSeller ? 'YES' : 'NO'}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="outline-warning"
+                      onClick={() => navigate(`/admin/user/${user._id}`)}
+                    >
+                      Edit
+                    </Button>{' '}
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="outline-danger"
+                      onClick={() => deleteHandler(user)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Row>
+            <div>
+              {[...Array(pages).keys()].map((x) => (
+                <LinkContainer
+                  key={x + 1}
+                  className="mx-1"
+                  to={getFilterUrl({ page: x + 1 })}
+                >
+                  <Button
+                    className={Number(page) === x + 1 ? 'text-bold' : ''}
+                    variant="light"
+                  >
+                    {x + 1}
+                  </Button>
+                </LinkContainer>
+              ))}
+            </div>
+          </Row>
+        </div>
       )}
     </div>
   );
