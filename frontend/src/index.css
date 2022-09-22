@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  flex: 1;
+  padding-top: 1rem;
+}
+.card-img-top {
+  height: 200px;
+}
+
+.site-container {
+  min-height: 100vh;
+}
+.rating span {
+  color: #fccf46;
+}
+.product-home {
+  min-height: 150px;
+}
+.img-large {
+  height: 500px;
+  max-width: 500px;
+}
+.btn-warning {
+  color: #000000;
+}
+.img-thumbnail {
+  height: 80px;
+}
+.small-container {
+  max-width: 600px;
+}
+#basic-nav-dropdown {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.checkout-steps > div {
+  border-bottom: 0.2rem solid #a0a0a0;
+  color: #a0a0a0;
+}
+.checkout-steps > div.active {
+  border-bottom: 0.2rem solid #f08000;
+  color: #f08000;
+}
+.upper {
+  text-transform: uppercase;
+}
+
+/* sidebar */
+
+.site-container {
+  transition: 0.4s;
+}
+.active-cont {
+  margin-left: 240px;
+}
+
+.side-navbar {
+  width: 240px;
+  margin-top: 5vh;
+  height: 100%;
+  position: absolute;
+  left: -300px;
+  transition: 0.4s;
+}
+.navbar-brand {
+  font-weight: bold;
+}
+.active-nav {
+  left: 0;
+  text-align: center;
+}
+#logo-img {
+  height: 50px;
+  width: 50px;
+}
+.text-bold {
+  font-weight: bold;
+}
+.search-category {
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+footer {
+  text-align: center;
+}
+.corousal {
+  height: 350px;
+}
+.corousal-item {
+  text-align: center;
+}
