@@ -34,16 +34,16 @@ const reducer = (state, action) => {
 
 const prices = [
   {
-    name: '1 to 50',
-    value: '1-50',
+    name: '0 to 1000',
+    value: '0-1000',
   },
   {
-    name: '51 to 200',
-    value: '51-200',
+    name: '1000 to 10000',
+    value: '1000-10000',
   },
   {
-    name: '201 to 1000',
-    value: '201-1000',
+    name: '10000 to 100000',
+    value: '10000-100000',
   },
 ];
 
@@ -77,6 +77,7 @@ export default function SearchScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
+      // dispatch({ type: 'FETCH_REQUEST' });
       try {
         const { data } = await axios.get(
           `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}`
