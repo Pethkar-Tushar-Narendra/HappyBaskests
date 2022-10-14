@@ -66,8 +66,8 @@ export default function AdminCreateProduct() {
   const submitHandler = async (e) => {
     e.preventDefault();
     // uploadFileHandler();
+    dispatch({ type: 'CREATE_REQUEST' });
     try {
-      dispatch({ type: 'CREATE_REQUEST' });
       await axios.post(
         `/api/products/`,
         {
@@ -100,8 +100,8 @@ export default function AdminCreateProduct() {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append('file', file);
+    dispatch({ type: 'UPLOAD_REQUEST' });
     try {
-      dispatch({ type: 'UPLOAD_REQUEST' });
       const { data } = await axios.post('/api/upload', bodyFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',

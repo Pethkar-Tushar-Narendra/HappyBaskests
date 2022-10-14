@@ -62,13 +62,7 @@ function App() {
   };
   return (
     <BrowserRouter>
-      <div
-        className={
-          sidebarIsOpen
-            ? 'd-flex flex-column site-container active-cont'
-            : 'd-flex flex-column site-container'
-        }
-      >
+      <div>
         <ToastContainer position="bottom-center" limit={1} />
         <header>
           <Navbar bg="dark" variant="dark" expand="lg">
@@ -155,33 +149,34 @@ function App() {
               </Navbar.Collapse>
             </Container>
           </Navbar>
-        </header>
-        <div
-          className={
-            sidebarIsOpen
-              ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
-              : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
-          }
-        >
-          <ListGroup className=" p-3">
-            <ListGroup.Item>
-              <strong>
-                <h4>Categories</h4>
-              </strong>
-            </ListGroup.Item>
 
-            {categories.map((category) => (
-              <ListGroup.Item key={category}>
-                <LinkContainer
-                  to={`/search?category=${category}`}
-                  onClick={() => setSidebarIsOpen(false)}
-                >
-                  <Nav.Link>{category}</Nav.Link>
-                </LinkContainer>
+          <div
+            className={
+              sidebarIsOpen
+                ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
+                : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
+            }
+          >
+            <ListGroup className=" p-3">
+              <ListGroup.Item>
+                <strong>
+                  <h4>Categories</h4>
+                </strong>
               </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </div>
+
+              {categories.map((category) => (
+                <ListGroup.Item key={category}>
+                  <LinkContainer
+                    to={`/search?category=${category}`}
+                    onClick={() => setSidebarIsOpen(false)}
+                  >
+                    <Nav.Link>{category}</Nav.Link>
+                  </LinkContainer>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </div>
+        </header>
         <main>
           <Container>
             <Routes>

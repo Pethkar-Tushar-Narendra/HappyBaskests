@@ -42,6 +42,9 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch({
+        type: 'FETCH_REQUEST',
+      });
       try {
         const { data } = await axios.get(`/api/products?page=${page}`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -65,10 +68,6 @@ export default function HomeScreen() {
       <Helmet>
         <title>E-Mart</title>
       </Helmet>
-      {/* <h1>Carousel</h1>
-      <div id="corousal">
-        <Corousal />
-      </div> */}
       <h1>Featured Products</h1>
       {loading ? (
         <LoadingBox />
